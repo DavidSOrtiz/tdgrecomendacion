@@ -1,0 +1,388 @@
+{% extends 'layout.html' %}
+
+{%block body%}
+<div class="col-md-12 offset-md-12">
+    <div class="card card-body">
+        <h5 style="text-align: center;">Hoja de Calificación</h5>
+        <table border="1" align="center" style="text-align: center;">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td colspan="2">Act - Ref</td>
+                    <td></td>
+                    <td colspan="2">Sens - Int</td>
+                    <td></td>
+                    <td colspan="2">Vis - Verb</td>
+                    <td></td>
+                    <td colspan="2">Sec - Glob</td>
+                </tr>
+                <tr>
+                    <td>Pregunta N°</td>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>Pregunta N°</td>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>Pregunta N°</td>
+                    <td>A</td>
+                    <td>B</td>
+                    <td>Pregunta N°</td>
+                    <td>A</td>
+                    <td>B</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% set Act_Ref = {'A': 0, 'B': 0} %}
+                {% set Sens_Int = {'A': 0, 'B': 0} %}
+                {% set Vis_Verb = {'A': 0, 'B': 0} %}
+                {% set Sec_Glob = {'A': 0, 'B': 0} %}
+                {% for pregunta in preguntas %}
+                    {% set numeropregunta = pregunta.2 | int %}
+                    {% if numeropregunta % 4 == 1 %}
+                        <tr>
+                        <td>{{ pregunta.2 }}</td>
+                        {% if pregunta.3 == "A" %}
+                            <td>1</td>
+                            <td></td>
+                            {% if Act_Ref.update({'A': Act_Ref.A + 1 }) %}{% endif %}
+                        {% else %}
+                            <td></td>
+                            <td>1</td>
+                            {% if Act_Ref.update({'B': Act_Ref.B + 1 }) %}{% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if numeropregunta % 4 == 2 %}
+                        <td>{{ pregunta.2 }}</td>
+                        {% if pregunta.3 == "A" %}
+                            <td>1</td>
+                            <td></td>
+                            {% if Sens_Int.update({'A': Sens_Int.A + 1 }) %}{% endif %}
+                        {% else %}
+                            <td></td>
+                            <td>1</td>
+                            {% if Sens_Int.update({'B': Sens_Int.B + 1 }) %}{% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if numeropregunta % 4 == 3 %}
+                        <td>{{ pregunta.2 }}</td>
+                        {% if pregunta.3 == "A" %}
+                            <td>1</td>
+                            <td></td>
+                            {% if Vis_Verb.update({'A': Vis_Verb.A + 1 }) %}{% endif %}
+                        {% else %}
+                            <td></td>
+                            <td>1</td>
+                            {% if Vis_Verb.update({'B': Vis_Verb.B + 1 }) %}{% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if numeropregunta % 4 == 0 %}
+                        <td>{{ pregunta.2 }}</td>
+                        {% if pregunta.3 == "A" %}
+                            <td>1</td>
+                            <td></td>
+                            {% if Sec_Glob.update({'A': Sec_Glob.A + 1 }) %}{% endif %}
+                        {% else %}
+                            <td></td>
+                            <td>1</td>
+                            {% if Sec_Glob.update({'B': Sec_Glob.B + 1 }) %}{% endif %}
+                        {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <table border="1" align="center" style="text-align: center;">
+            <tr>
+                <td></td>
+                <td colspan="2">Act - Ref</td>
+                <td></td>
+                <td colspan="2">Sens - Int</td>
+                <td></td>
+                <td colspan="2">Vis - Verb</td>
+                <td></td>
+                <td colspan="2">Sec - Glob</td>
+            </tr>
+            <tr>
+                <td>Total Columna</td>
+                <td>{{ Act_Ref.A }}</td>
+                <td>{{ Act_Ref.B }}</td>
+                <td></td>
+                <td>{{ Sens_Int.A }}</td>
+                <td>{{ Sens_Int.B }}</td>
+                <td></td>
+                <td>{{ Vis_Verb.A }}</td>
+                <td>{{ Vis_Verb.B }}</td>
+                <td></td>
+                <td>{{ Sec_Glob.A }}</td>
+                <td>{{ Sec_Glob.B }}</td>
+            </tr>
+            <tr>
+                <td>Restar Menor al Mayor</td>
+                {% if Act_Ref.A > Act_Ref.B %}
+                <td colspan="2">{{ Act_Ref.A - Act_Ref.B }}</td>
+                {% else %}
+                <td colspan="2">{{ Act_Ref.B - Act_Ref.A }}</td>
+                {% endif %}
+                <td></td>
+                {% if Sens_Int.A > Sens_Int.B %}
+                <td colspan="2">{{ Sens_Int.A - Sens_Int.B }}</td>
+                {% else %}
+                <td colspan="2">{{ Sens_Int.B - Sens_Int.A }}</td>
+                {% endif %}
+                <td></td>
+                {% if Vis_Verb.A > Vis_Verb.B %}
+                <td colspan="2">{{ Vis_Verb.A - Vis_Verb.B }}</td>
+                {% else %}
+                <td colspan="2">{{ Vis_Verb.B - Vis_Verb.A }}</td>
+                {% endif %}
+                <td></td>
+                {% if Sec_Glob.A > Sec_Glob.B %}
+                <td colspan="2">{{ Sec_Glob.A - Sec_Glob.B }}</td>
+                {% else %}
+                <td colspan="2">{{ Sec_Glob.B - Sec_Glob.A }}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Restar Menor al Mayor</td>
+                {% if Act_Ref.A > Act_Ref.B %}
+                <td colspan="2">{{ Act_Ref.A - Act_Ref.B }}A</td>
+                {% else %}
+                <td colspan="2">{{ Act_Ref.B - Act_Ref.A }}B</td>
+                {% endif %}
+                <td width="5%"></td>
+                {% if Sens_Int.A > Sens_Int.B %}
+                <td colspan="2">{{ Sens_Int.A - Sens_Int.B }}A</td>
+                {% else %}
+                <td colspan="2">{{ Sens_Int.B - Sens_Int.A }}B</td>
+                {% endif %}
+                <td width="5%"></td>
+                {% if Vis_Verb.A > Vis_Verb.B %}
+                <td colspan="2">{{ Vis_Verb.A - Vis_Verb.B }}A</td>
+                {% else %}
+                <td colspan="2">{{ Vis_Verb.B - Vis_Verb.A }}B</td>
+                {% endif %}
+                <td width="5%"></td>
+                {% if Sec_Glob.A > Sec_Glob.B %}
+                <td colspan="2">{{ Sec_Glob.A - Sec_Glob.B }}A</td>
+                {% else %}
+                <td colspan="2">{{ Sec_Glob.B - Sec_Glob.A }}B</td>
+                {% endif %}
+            </tr>
+        </table>
+        <br>
+        <h5 style="text-align: center;">Hoja de Perfil</h5>
+        <br>
+        <table border="1" align="center" style="text-align: center;">
+            <tr>
+                <td></td>
+                <td>11</td>
+                <td>9</td>
+                <td>7</td>
+                <td>5</td>
+                <td>3</td>
+                <td>1</td>
+                <td>1</td>
+                <td>3</td>
+                <td>5</td>
+                <td>7</td>
+                <td>9</td>
+                <td>11</td>
+                <td></td>
+            </tr>
+            {% for perfil in perfiles %}
+                {% if perfil.2 == "Activo" %}
+                    <tr>
+                        <td>ACTIVO</td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 5 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 0 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        <td>REFLEXIVO</td>
+                    </tr>
+                {% elif perfil.2 == "Reflexivo" %}
+                    <tr>
+                        <td>ACTIVO</td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 0 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 5 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>REFLEXIVO</td>
+                    </tr>
+                {% endif %}
+                {% if perfil.2 == "Sensorial" %}
+                    <tr>
+                        <td>SENSORIAL</td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 5 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 0 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        <td>INTUITIVO</td>
+                    </tr>
+                {% elif perfil.2 == "Intuitivo" %}
+                    <tr>
+                        <td>SENSORIAL</td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 0 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 5 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>INTUITIVO</td>
+                    </tr>
+                {% endif %}
+                {% if perfil.2 == "Visual" %}
+                    <tr>
+                        <td>VISUAL</td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 5 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 0 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        <td>VERBAL</td>
+                    </tr>
+                {% elif perfil.2 == "Verbal" %}
+                    <tr>
+                        <td>VISUAL</td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 0 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 5 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>Verbal</td>
+                    </tr>
+                {% endif %}
+                {% if perfil.2 == "Secuencial" %}
+                    <tr>
+                        <td>SECUENCIAL</td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 5 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 0 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        <td>GLOBAL</td>
+                    </tr>
+                {% elif perfil.2 == "Global" %}
+                    <tr>
+                        <td>SECUENCIAL</td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                        {% for x in range(6) %}
+                            {% if perfil.3 == 1 and x == 0 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 3 and x == 1 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 5 and x == 2 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 7 and x == 3 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 9 and x == 4 %}
+                                <td>X</td>
+                            {% elif perfil.3 == 11 and x == 5 %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>GLOBAL</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <br>
+        <a href="/" class="btn btn-secondary" role="button">Regresar</a>
+    </div>
+</div>
+{% endblock %}

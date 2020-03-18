@@ -1,0 +1,682 @@
+{% extends 'layout.html' %}
+
+{%block body%}
+<div class="col-md-12 offset-md-12">
+    <div class="card card-body">
+        <p>INSTRUCCIONES:</p>
+        <p>• Selecciona la opción "a" o "b" para indicar su respuesta a cada
+        pregunta.</p>
+        <p>• Si tanto "a" y "b" parecen aplicarse a usted, seleccione aquella que se aplique
+        más frecuentemente.</p> 
+        <form action="/GrabarFormulario/{{estudianteid.0}}" method="POST">
+            <table>
+                <tr>
+                    <th>
+                        <p>1. Entiendo mejor algo:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="1A" name="1" value="1A" required>
+                            <label for="1">a) Si lo practico.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="1B" name="1" value="1B">
+                            <label for="1">b) Si pienso en ello.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>2. Me considero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="2A" name="2" value="2A" required>
+                            <label for="2">a) Realista.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="2B" name="2" value="2B">
+                            <label for="2">b) Innovador.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>3. Cuando pienso acerca de lo que hice ayer,<br> es más probable que lo haga sobre la base de:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="3A" name="3" value="3A" required>
+                            <label for="3">a) Una imagen.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="3B" name="3" value="3B">
+                            <label for="3">b) Palabras.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>4. Tengo tendencia a:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="4A" name="4" value="4A" required>
+                            <label for="4">a) Entender los detalles de un tema pero no ver claramente su estructura completa.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="4B" name="4" value="4B">
+                            <label for="4">b) Entender la estructura completa pero no ver claramente los detalles.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>5. Cuando estoy aprendiendo algo nuevo, me ayuda:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="5A" name="5" value="5A" required>
+                            <label for="5">a) Hablar de ello.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="5B" name="5" value="5B">
+                            <label for="5">b) Pensar en ello.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>6. Si yo fuera profesor, yo preferiría dar un curso:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="6A" name="6" value="6A" required>
+                            <label for="6">a) Que trate sobre hechos y situaciones reales de la vida.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="6B" name="6" value="6B">
+                            <label for="6">b) Que trate con ideas y teorías.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>7. Prefiero obtener información nueva de:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="7A" name="7" value="7A" required>
+                            <label for="7">a) Imágenes, diagramas, gráficas o mapas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="7B" name="7" value="7B">
+                            <label for="7">b) Instrucciones escritas o información verbal.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>8. Una vez que entiendo:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="8A" name="8" value="8A" required>
+                            <label for="8">a) Todas las partes, entiendo el total.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="8B" name="8" value="8B">
+                            <label for="8">b) El total de algo, entiendo como encajan sus partes.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>9. En un grupo de estudio que trabaja con un material difícil, es más probable que:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="9A" name="9" value="9A" required>
+                            <label for="9">a) Participe y contribuya con ideas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="9B" name="9" value="9B">
+                            <label for="9">b) No participe y solo escuche.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>10. Es más fácil para mí:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="10A" name="10" value="10A" required>
+                            <label for="10">a) Aprender hechos.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="10B" name="10" value="10B">
+                            <label for="10">b) Aprender conceptos.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>11. En un libro con muchas imágenes y gráficas, es más probable que:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="11A" name="11" value="11A" required>
+                            <label for="11">a) Revise cuidadosamente las imágenes y las gráficas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="11B" name="11" value="11B">
+                            <label for="11">b) Me concentre en el texto escrito.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>12. Cuando resuelvo problemas de matemáticas:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="12A" name="12" value="12A" required>
+                            <label for="12">a) Generalmente trabajo sobre las soluciones con un paso a la vez.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="12B" name="12" value="12B">
+                            <label for="12">b) Frecuentemente sé cuales son las soluciones, pero luego tengo dificultad para imaginarme los pasos para llegar a ellas.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>13. En las clases a las que he asistido:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="13A" name="13" value="13A" required>
+                            <label for="13">a) He llegado a saber como son muchos de los estudiantes.  </label>
+                        </div>
+                        <div>
+                            <input type="radio" id="13B" name="13" value="13B">
+                            <label for="13">b) Raramente he llegado a saber como son muchos estudiantes.  </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>14. Cuando leo temas que no son de ficción, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="14A" name="14" value="14A" required>
+                            <label for="14">a) Algo que me enseñe nuevos hechos o me diga como hacer algo.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="14B" name="14" value="14B">
+                            <label for="14">b) Algo que me dé nuevas ideas en que pensar.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>15. Me gustan los maestros:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="15A" name="15" value="15A" required>
+                            <label for="15">a) Que utilizan muchos esquemas en el pizarrón.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="15B" name="15" value="15B">
+                            <label for="15">b) Que toman mucho tiempo para explicar.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>16. Cuando estoy analizando un cuento o una novela:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="16A" name="16" value="16A" required>
+                            <label for="16">a) Pienso en los incidentes y trato de acomodarlos para configurar los temas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="16B" name="16" value="16B">
+                            <label for="16">b) Me doy cuenta de cuales son los temas cuando termino de leer y luego tengo que regresar y encontrar los incidentes que los demuestran. </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>17. Cuando comienzo a resolver un problema de tarea, es más probable que:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="17A" name="17" value="17A" required>
+                            <label for="17">a) Comience a trabajar en su solución inmediatamente.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="17B" name="17" value="17B">
+                            <label for="17">b) Primero trate de entender completamente el problema.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>18. Prefiero la idea de:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="18A" name="18" value="18A" required>
+                            <label for="18">a) Certeza.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="18B" name="18" value="18B">
+                            <label for="18">b) Teoría.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>19. Recuerdo mejor:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="19A" name="19" value="19A" required>
+                            <label for="19">a) Lo que veo. </label>
+                        </div>
+                        <div>
+                            <input type="radio" id="19B" name="19" value="19B">
+                            <label for="19">b) Lo que oigo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>20. Es más importante para mí que un profesor:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="20A" name="20" value="20A" required>
+                            <label for="20">a) Exponga el material en pasos secuenciales claros.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="20B" name="20" value="20B">
+                            <label for="20">b) Me dé un panorama general y relacione el material con otros temas.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>21. Prefiero estudiar:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="21A" name="21" value="21A" required>
+                            <label for="21">a) En un grupo de estudio.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="21B" name="21" value="21B">
+                            <label for="21">b) Solo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>22. Me considero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="22A" name="22" value="22A" required>
+                            <label for="22">a) Cuidadoso en los detalles de mi trabajo.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="22B" name="22" value="22B">
+                            <label for="22">b) Creativo en la forma en la que hago mi trabajo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>23. Cuando alguien me da direcciones de nuevos lugares, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="23A" name="23" value="23A" required>
+                            <label for="23">a) Un mapa.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="23B" name="23" value="23B">
+                            <label for="23">b) Instrucciones escritas.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>24. Aprendo:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="24A" name="24" value="24A" required>
+                            <label for="24">a) A un paso constante. Si estudio con ahínco consigo lo que deseo.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="24B" name="24" value="24B">
+                            <label for="24">b) En inicios y pausas. Me llego a confundir y súbitamente lo entiendo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>25. Prefiero primero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="25A" name="25" value="25A" required>
+                            <label for="25">a) Hacer algo y ver que sucede.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="25B" name="25" value="25B">
+                            <label for="25">b) Pensar como voy a hacer algo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>26. Cuando leo por diversión, me gustan los escritores que:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="26A" name="26" value="26A" required>
+                            <label for="26">a) Dicen claramente los que desean dar a entender.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="26B" name="26" value="26B">
+                            <label for="26">b) Dicen las cosas en forma creativa e interesante.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>27. Cuando veo un esquema o bosquejo en clase, es más probable que recuerde:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="27A" name="27" value="27A" required>
+                            <label for="27">a) La imagen.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="27B" name="27" value="27B">
+                            <label for="27">b) Lo que el profesor dijo acerca de ella.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>28. Cuando me enfrento a un cuerpo de información:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="28A" name="28" value="28A" required>
+                            <label for="28">a) Me concentro en los detalles y pierdo de vista el total de la misma.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="28B" name="28" value="28B">
+                            <label for="28">b) Trato de entender el todo antes de ir a los detalles.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>29. Recuerdo más fácilmente:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="29A" name="29" value="29A" required>
+                            <label for="29">a) Algo que he hecho.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="29B" name="29" value="29B">
+                            <label for="29">b) Algo en lo que he pensado mucho.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>30. Cuando tengo que hacer un trabajo, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="30A" name="30" value="30A" required>
+                            <label for="30">a) Dominar una forma de hacerlo.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="30B" name="30" value="30B">
+                            <label for="30">b) Intentar nuevas formas de hacerlo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>31. Cuando alguien me enseña datos, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="31A" name="31" value="31A" required>
+                            <label for="31">a) Gráficas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="31B" name="31" value="31B">
+                            <label for="31">b) Resúmenes con texto.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>32. Cuando escribo un trabajo, es más probable que:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="32A" name="32" value="32A" required>
+                            <label for="32">a) Lo haga (piense o escriba) desde el principio y avance.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="32B" name="32" value="32B">
+                            <label for="32">b) Lo haga (piense o escriba) en diferentes partes y luego las ordene.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>33. Cuando tengo que trabajar en un proyecto de grupo, primero quiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="33A" name="33" value="33A" required>
+                            <label for="33">a) Realizar una "tormenta de ideas" donde cada uno contribuye con ideas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="33B" name="33" value="33B">
+                            <label for="33">b) Realizar la "tormenta de ideas" en forma personal<br> y luego juntarme con el grupo para comparar las ideas.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>34. Considero que es mejor elogio llamar a alguien:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="34A" name="34" value="34A" required>
+                            <label for="34">a) Sensible.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="34B" name="34" value="34B">
+                            <label for="34">b) Imaginativo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>35. Cuando conozco gente en una fiesta, es más probable que recuerde:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="35A" name="35" value="35A" required>
+                            <label for="35">a) Cómo es su apariencia.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="35B" name="35" value="35B">
+                            <label for="35">b) Lo que dicen de sí mismos.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>36. Cuando estoy aprendiendo un tema, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="36A" name="36" value="36A" required>
+                            <label for="36">a) Mantenerme concentrado en ese tema, aprendiendo lo más que pueda de él.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="36B" name="36" value="36B">
+                            <label for="36">b) Hacer conexiones entre ese tema y temas relacionados.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>37. Me considero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="37A" name="37" value="37A" required>
+                            <label for="37">a) Abierto.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="37B" name="37" value="37B">
+                            <label for="37">b) Reservado.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>38. Prefiero cursos que dan más importancia a:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="38A" name="38" value="38A" required>
+                            <label for="38">a) Material concreto (hechos, datos).</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="38B" name="38" value="38B">
+                            <label for="38">b) Material abstracto (conceptos, teorías).</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>39. Para divertirme, prefiero:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="39A" name="39" value="39A" required>
+                            <label for="39">a) Ver televisión.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="39B" name="39" value="39B">
+                            <label for="39">b) Leer un libro.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>40.  Algunos profesores inician sus clases haciendo un bosquejo de lo que enseñarán. Esos bosquejos son:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="40A" name="40" value="40A" required>
+                            <label for="40">a) Algo útiles para mí.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="40B" name="40" value="40B">
+                            <label for="40">b) Muy útiles para mí.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>41. La idea de hacer una tarea en grupo con una sola calificación para todos:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="41A" name="41" value="41A" required>
+                            <label for="41">a) Me parece bien.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="41B" name="41" value="41B">
+                            <label for="41">b) No me parece bien.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>42. Cuando hago grandes cálculos:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="42A" name="42" value="42A" required>
+                            <label for="42">a) Tiendo a repetir todos mis pasos y revisar cuidadosamente mi trabajo.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="42B" name="42" value="42B">
+                            <label for="42">b) Me cansa hacer su revisión y tengo que esforzarme para hacerlo.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>43. Tiendo a recordar lugares en los que he estado:</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="43A" name="43" value="43A" required>
+                            <label for="43">a) Fácilmente y con bastante exactitud.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="43B" name="43" value="43B">
+                            <label for="43">b) Con dificultad y sin mucho detalle.</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <p>44. Cuando resuelvo problemas en grupo, es más probable que yo</p>
+                    </th>
+                    <td>
+                        <div>
+                            <input type="radio" id="44A" name="44" value="44A" required>
+                            <label for="44">a) Piense en los pasos para la solución de los problemas.</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="44B" name="44" value="44B">
+                            <label for="44">b) Piense en las posibles consecuencias o <br>aplicaciones de la solución en un amplio rango de campos</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" class="btn btn-success btn-block">Guardar</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}
