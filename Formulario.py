@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pyodbc
 import datetime
 
@@ -43,7 +43,7 @@ def add_student():
         conn.commit()
         cur.close()
         flash('Estudiante ingresado correctamente.')
-        return redirect(url_for('Index'))
+        return redirect(url_for('index'))
 
 @app.route('/Accessing', methods=['POST'])
 def Accessing():
@@ -54,10 +54,16 @@ def Accessing():
         cur.execute('SELECT * FROM usuario WHERE correo = ? And clave = ?' , (Usuario, Contrasena))
         Usuario = cur.fetchall()
         if len(Usuario) > 0:
-            return render_template('menu.html', Usuario = Usuario[0])
+            for row in Usuario:
+                session['idUser'] = row[0]
+                idUser = row[0]
+                session['NomUser'] = row[1]
+            cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (idUser))
+            data = cur.fetchall()
+            return render_template('menu.html', Usuario = Usuario[0], Datos = data)
         else:
             flash('La información ingresada no es correcta.')
-            return render_template('Index.html')
+            return render_template('index.html')
         cur.close()
 
 @app.route('/menu/<id>', methods=['POST'])
@@ -89,20 +95,23 @@ def edit_estudiante(id):
         conn.commit()
         cur.close()
         flash('Estudiante actualizado correctamente.')
-        return redirect(url_for('Index'))
+        return redirect(url_for('index'))
 
-@app.route('/responder_formulario/<id>')
-def responder_formulario(id):
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM Test_Felder_Silverman WHERE Id_Student = ?' , (id))
-    data = cur.fetchall()
-    cur.execute('SELECT * FROM Test_Result WHERE Id_Student = ?' , (id))
-    data1 = cur.fetchall()
-    cur.close()
-    if len(data) > 0:
-        return render_template('formularioResuelto.html', preguntas = data, perfiles = data1)
-    else:
-        return render_template('formulario.html', estudianteid = id)
+@app.route('/responder_formulario', methods=['GET'])
+def responder_formulario():
+    if request.method == 'GET':
+        if 'idUser' in session:
+            id = session['idUser']
+            cur = conn.cursor()
+            cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (id))
+            data = cur.fetchall()
+            cur.execute('SELECT * FROM test_result WHERE id_user = ?' , (id))
+            data1 = cur.fetchall()
+            cur.close()
+            if len(data) > 0:
+                return render_template('formularioResuelto.html', preguntas = data, perfiles = data1)
+            else:
+                return render_template('formulario.html', estudianteid = id)
 
 @app.route('/GrabarFormulario/<id>', methods=['POST'])
 def Grabar_Formulario(id):
@@ -175,7 +184,7 @@ def Grabar_Formulario(id):
         cur.execute('INSERT INTO Test_Result (Id_Student, Perfil, Puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
         conn.commit()
     cur.close()
-    return redirect(url_for('Index'))
+    return redirect(url_for('index'))
 
 # starting the app
 if __name__ == "__main__":
