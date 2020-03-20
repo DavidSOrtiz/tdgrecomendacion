@@ -19,7 +19,8 @@ app.secret_key = "mysecretkey"
 
 # routes
 @app.route('/')
-def Index():
+def index():
+    session.clear()
     return render_template('index.html')
 
 @app.route('/Registrate')
@@ -45,19 +46,28 @@ def add_student():
         flash('Estudiante ingresado correctamente.')
         return redirect(url_for('index'))
 
-@app.route('/Accessing', methods=['POST'])
+@app.route('/Accessing', methods=['POST', "GET"])
 def Accessing():
-    if request.method == 'POST':
-        Usuario = request.form['Usuario']
-        Contrasena = request.form['Contrasena']
+    if request.method == 'POST' or request.method == 'GET':
         cur = conn.cursor()
-        cur.execute('SELECT * FROM usuario WHERE correo = ? And clave = ?' , (Usuario, Contrasena))
-        Usuario = cur.fetchall()
-        if len(Usuario) > 0:
-            for row in Usuario:
-                session['idUser'] = row[0]
-                idUser = row[0]
-                session['NomUser'] = row[1]
+        if request.method == 'POST':
+            Usuario = request.form['Usuario']
+            Contrasena = request.form['Contrasena']
+            cur.execute('SELECT * FROM usuario WHERE correo = ? And clave = ?' , (Usuario, Contrasena))
+            Usuario = cur.fetchall()
+            if len(Usuario) > 0:
+                for row in Usuario:
+                    session['idUser'] = row[0]
+                    idUser = row[0]
+                    session['NomUser'] = row[1]
+        else:
+            if 'idUser' in session and 'NomUser' in session:
+                idUser = session['idUser']
+                cur.execute('SELECT * FROM usuario WHERE id_user = ?' , (idUser))
+                Usuario = cur.fetchall()
+            else:
+                return render_template('index.html')
+        if len(Usuario) > 0:  
             cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (idUser))
             data = cur.fetchall()
             return render_template('menu.html', Usuario = Usuario[0], Datos = data)
@@ -66,52 +76,75 @@ def Accessing():
             return render_template('index.html')
         cur.close()
 
-@app.route('/menu/<id>', methods=['POST'])
-def Menu(id):
-    return "Hola"
+@app.route('/recomendaciones', methods=['GET'])
+def recomendaciones():
+    if 'idUser' in session and 'NomUser' in session:
+        if request.method == 'GET':
+            if 'idUser' in session:
+                id = session['idUser']
+                cur = conn.cursor()
+                cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (id))
+                data = cur.fetchall()
+                cur.close()
+                if len(data) > 0:
+                    return render_template('recomendaciones.html')
+                else:
+                    return render_template('formulario.html', estudianteid = id)
+    else:
+        return render_template('index.html')
 
-@app.route('/editar_estudiante/<id>')
-def editar_estudiante(id):
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM Users WHERE UserId = ?' , (id))
-    data = cur.fetchall()
-    cur.close()
-    return render_template('editar_estudiante.html', estudiante = data[0])
-
-@app.route('/update/<id>', methods=['POST'])
-def edit_estudiante(id):
-    if request.method == 'POST':
-        Names = request.form['Names']
-        Document = request.form['Document']
-        Email = request.form['Email']
+@app.route('/editar_estudiante')
+def editar_estudiante():
+    if 'idUser' in session and 'NomUser' in session:
+        id = session['idUser']
         cur = conn.cursor()
-        cur.execute("""
-            UPDATE Users
-            SET Names = ?,
-            Document = ?,
-            Email = ?
-            WHERE UserId = ?
-        """, (Names, Document, Email, id))
-        conn.commit()
+        cur.execute('SELECT * FROM usuario WHERE id_user = ?' , (id))
+        data = cur.fetchall()
         cur.close()
-        flash('Estudiante actualizado correctamente.')
-        return redirect(url_for('index'))
+        return render_template('editar_estudiante.html', estudiante = data[0])
+    else:
+        return render_template('index.html')
+
+@app.route('/update', methods=['POST'])
+def edit_estudiante():
+    if 'idUser' in session and 'NomUser' in session:
+        if request.method == 'POST':
+            Names = request.form['Names']
+            Document = request.form['Document']
+            Email = request.form['Email']
+            cur = conn.cursor()
+            cur.execute("""
+                UPDATE Users
+                SET Names = ?,
+                Document = ?,
+                Email = ?
+                WHERE UserId = ?
+            """, (Names, Document, Email, id))
+            conn.commit()
+            cur.close()
+            flash('Estudiante actualizado correctamente.')
+            return redirect(url_for('menu'))
+    else:
+        return render_template('index.html')
 
 @app.route('/responder_formulario', methods=['GET'])
 def responder_formulario():
-    if request.method == 'GET':
-        if 'idUser' in session:
-            id = session['idUser']
-            cur = conn.cursor()
-            cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (id))
-            data = cur.fetchall()
-            cur.execute('SELECT * FROM test_result WHERE id_user = ?' , (id))
-            data1 = cur.fetchall()
-            cur.close()
-            if len(data) > 0:
-                return render_template('formularioResuelto.html', preguntas = data, perfiles = data1)
-            else:
-                return render_template('formulario.html', estudianteid = id)
+    if 'idUser' in session and 'NomUser' in session:
+        if request.method == 'GET':
+            if 'idUser' in session:
+                id = session['idUser']
+                cur = conn.cursor()
+                cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (id))
+                data = cur.fetchall()
+                cur.execute('SELECT * FROM test_result WHERE id_user = ?' , (id))
+                data1 = cur.fetchall()
+                cur.close()
+                if len(data) > 0:
+                    return render_template('formularioResuelto.html', preguntas = data, perfiles = data1)
+                else:
+                    return render_template('formulario.html', estudianteid = id)
+    else:
+        return render_template('index.html')
 
 @app.route('/GrabarFormulario/<id>', methods=['POST'])
 def Grabar_Formulario(id):
