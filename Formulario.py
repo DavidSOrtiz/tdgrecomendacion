@@ -100,8 +100,10 @@ def editar_estudiante():
         cur = conn.cursor()
         cur.execute('SELECT * FROM usuario WHERE id_user = ?' , (id))
         data = cur.fetchall()
+        cur.execute('SELECT * FROM tema')
+        temas = cur.fetchall()
         cur.close()
-        return render_template('editar_estudiante.html', estudiante = data[0])
+        return render_template('editar_estudiante.html', estudiante = data[0], temas = temas)
     else:
         return render_template('index.html')
 
@@ -109,21 +111,24 @@ def editar_estudiante():
 def edit_estudiante():
     if 'idUser' in session and 'NomUser' in session:
         if request.method == 'POST':
+            id = session['idUser']
             Names = request.form['Names']
-            Document = request.form['Document']
             Email = request.form['Email']
+            Password = request.form['Password']
+            idtema = request.form['idtema']
             cur = conn.cursor()
             cur.execute("""
-                UPDATE Users
-                SET Names = ?,
-                Document = ?,
-                Email = ?
-                WHERE UserId = ?
-            """, (Names, Document, Email, id))
+                UPDATE usuario
+                SET nombre = ?,
+                correo = ?,
+                clave = ?,
+                id_tema = ?
+                WHERE id_user = ?
+            """, (Names, Email, Password, idtema, id))
             conn.commit()
             cur.close()
             flash('Estudiante actualizado correctamente.')
-            return redirect(url_for('menu'))
+            return redirect(url_for('Accessing'))
     else:
         return render_template('index.html')
 

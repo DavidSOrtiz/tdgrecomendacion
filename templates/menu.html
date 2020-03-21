@@ -2,6 +2,20 @@
 
 {%block body%}
 <div class="col-md-8" style="margin: auto;">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message == 'Estudiante actualizado correctamente.' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="card card-body">
         <h4 style="text-align: center;">!Hola {{Usuario.1}}¡</h4>
         <br>
