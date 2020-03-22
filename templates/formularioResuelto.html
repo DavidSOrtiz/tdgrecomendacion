@@ -37,11 +37,11 @@
                 {% set Vis_Verb = {'A': 0, 'B': 0} %}
                 {% set Sec_Glob = {'A': 0, 'B': 0} %}
                 {% for pregunta in preguntas %}
-                    {% set numeropregunta = pregunta.2 | int %}
+                    {% set numeropregunta = pregunta.1 | int %}
                     {% if numeropregunta % 4 == 1 %}
                         <tr>
-                        <td>{{ pregunta.2 }}</td>
-                        {% if pregunta.3 == "A" %}
+                        <td>{{ pregunta.1 }}</td>
+                        {% if pregunta.2 == "A" %}
                             <td>1</td>
                             <td></td>
                             {% if Act_Ref.update({'A': Act_Ref.A + 1 }) %}{% endif %}
@@ -52,8 +52,8 @@
                         {% endif %}
                     {% endif %}
                     {% if numeropregunta % 4 == 2 %}
-                        <td>{{ pregunta.2 }}</td>
-                        {% if pregunta.3 == "A" %}
+                        <td>{{ pregunta.1 }}</td>
+                        {% if pregunta.2 == "A" %}
                             <td>1</td>
                             <td></td>
                             {% if Sens_Int.update({'A': Sens_Int.A + 1 }) %}{% endif %}
@@ -64,8 +64,8 @@
                         {% endif %}
                     {% endif %}
                     {% if numeropregunta % 4 == 3 %}
-                        <td>{{ pregunta.2 }}</td>
-                        {% if pregunta.3 == "A" %}
+                        <td>{{ pregunta.1 }}</td>
+                        {% if pregunta.2 == "A" %}
                             <td>1</td>
                             <td></td>
                             {% if Vis_Verb.update({'A': Vis_Verb.A + 1 }) %}{% endif %}
@@ -76,8 +76,8 @@
                         {% endif %}
                     {% endif %}
                     {% if numeropregunta % 4 == 0 %}
-                        <td>{{ pregunta.2 }}</td>
-                        {% if pregunta.3 == "A" %}
+                        <td>{{ pregunta.1 }}</td>
+                        {% if pregunta.2 == "A" %}
                             <td>1</td>
                             <td></td>
                             {% if Sec_Glob.update({'A': Sec_Glob.A + 1 }) %}{% endif %}

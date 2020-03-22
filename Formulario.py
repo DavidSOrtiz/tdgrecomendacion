@@ -151,78 +151,82 @@ def responder_formulario():
     else:
         return render_template('index.html')
 
-@app.route('/GrabarFormulario/<id>', methods=['POST'])
-def Grabar_Formulario(id):
-    if request.method == 'POST':
-        Act_RefA = 0
-        Act_RefB = 0
-        Sens_IntA = 0
-        Sens_IntB = 0
-        Vis_VerbA = 0
-        Vis_VerbB = 0
-        Sec_GlobA = 0
-        Sec_GlobB = 0
-        for Contador in range(44):
-            Dato = request.form['' + str(Contador + 1) + '']
-            Pregunta = Contador + 1
-            Respuesta = Dato[-1:]
-            cur = conn.cursor()
-            cur.execute('INSERT INTO Test_Felder_Silverman (Id_Student, Question_Description, Answers) VALUES(?,?,?)', (id, Pregunta, Respuesta))
+@app.route('/GrabarFormulario', methods=['POST'])
+def Grabar_Formulario():
+    if 'idUser' in session and 'NomUser' in session:
+        if request.method == 'POST':
+            id = session['idUser']
+            Act_RefA = 0
+            Act_RefB = 0
+            Sens_IntA = 0
+            Sens_IntB = 0
+            Vis_VerbA = 0
+            Vis_VerbB = 0
+            Sec_GlobA = 0
+            Sec_GlobB = 0
+            for Contador in range(44):
+                Dato = request.form['' + str(Contador + 1) + '']
+                Pregunta = Contador + 1
+                Respuesta = Dato[-1:]
+                cur = conn.cursor()
+                cur.execute('INSERT INTO test_felder (id_user, id_question, respuesta) VALUES(?,?,?)', (id, Pregunta, Respuesta))
+                conn.commit()
+                if Pregunta % 4 == 1:
+                    if Respuesta == "A":
+                        Act_RefA = Act_RefA + 1
+                    else:
+                        Act_RefB = Act_RefB + 1
+                elif Pregunta % 4 == 2:
+                    if Respuesta == "A":
+                        Sens_IntA = Sens_IntA + 1
+                    else:
+                        Sens_IntB = Sens_IntB + 1
+                elif Pregunta % 4 == 3:
+                    if Respuesta == "A":
+                        Vis_VerbA = Vis_VerbA + 1
+                    else:
+                        Vis_VerbB = Vis_VerbB + 1
+                elif Pregunta % 4 == 0:
+                    if Respuesta == "A":
+                        Sec_GlobA = Sec_GlobA + 1
+                    else:
+                        Sec_GlobB = Sec_GlobB + 1
+            if Act_RefA > Act_RefB:
+                Preferencia = "Activo"
+                Calculo = Act_RefA - Act_RefB
+            else:
+                Preferencia = "Reflexivo"
+                Calculo = Act_RefB - Act_RefA
+            cur.execute('INSERT INTO test_result (id_user, perfil, puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
             conn.commit()
-            if Pregunta % 4 == 1:
-                if Respuesta == "A":
-                    Act_RefA = Act_RefA + 1
-                else:
-                    Act_RefB = Act_RefB + 1
-            elif Pregunta % 4 == 2:
-                if Respuesta == "A":
-                    Sens_IntA = Sens_IntA + 1
-                else:
-                    Sens_IntB = Sens_IntB + 1
-            elif Pregunta % 4 == 3:
-                if Respuesta == "A":
-                    Vis_VerbA = Vis_VerbA + 1
-                else:
-                    Vis_VerbB = Vis_VerbB + 1
-            elif Pregunta % 4 == 0:
-                if Respuesta == "A":
-                    Sec_GlobA = Sec_GlobA + 1
-                else:
-                    Sec_GlobB = Sec_GlobB + 1
-        if Act_RefA > Act_RefB:
-            Preferencia = "Activo"
-            Calculo = Act_RefA - Act_RefB
-        else:
-            Preferencia = "Reflexivo"
-            Calculo = Act_RefB - Act_RefA
-        cur.execute('INSERT INTO Test_Result (Id_Student, Perfil, Puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
-        conn.commit()
-        if Sens_IntA > Sens_IntB:
-            Preferencia = "Sensorial"
-            Calculo = Sens_IntA - Sens_IntB
-        else:
-            Preferencia = "Intuitivo"
-            Calculo = Sens_IntB - Sens_IntA
-        cur.execute('INSERT INTO Test_Result (Id_Student, Perfil, Puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
-        conn.commit()
-        if Vis_VerbA > Vis_VerbB:
-            Preferencia = "Visual"
-            Calculo = Vis_VerbA - Vis_VerbB
-        else:
-            Preferencia = "Verbal"
-            Calculo = Vis_VerbB - Vis_VerbA
-        cur.execute('INSERT INTO Test_Result (Id_Student, Perfil, Puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
-        conn.commit()
-        if Sec_GlobA > Sec_GlobB:
-            Preferencia = "Secuencial"
-            Calculo = Sec_GlobA - Sec_GlobB
-        else:
-            Preferencia = "Global"
-            Calculo = Sec_GlobB - Sec_GlobA
-        cur.execute('INSERT INTO Test_Result (Id_Student, Perfil, Puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
-        conn.commit()
-    cur.close()
-    return redirect(url_for('index'))
+            if Sens_IntA > Sens_IntB:
+                Preferencia = "Sensorial"
+                Calculo = Sens_IntA - Sens_IntB
+            else:
+                Preferencia = "Intuitivo"
+                Calculo = Sens_IntB - Sens_IntA
+            cur.execute('INSERT INTO test_result (id_user, perfil, puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
+            conn.commit()
+            if Vis_VerbA > Vis_VerbB:
+                Preferencia = "Visual"
+                Calculo = Vis_VerbA - Vis_VerbB
+            else:
+                Preferencia = "Verbal"
+                Calculo = Vis_VerbB - Vis_VerbA
+            cur.execute('INSERT INTO test_result (id_user, perfil, puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
+            conn.commit()
+            if Sec_GlobA > Sec_GlobB:
+                Preferencia = "Secuencial"
+                Calculo = Sec_GlobA - Sec_GlobB
+            else:
+                Preferencia = "Global"
+                Calculo = Sec_GlobB - Sec_GlobA
+            cur.execute('INSERT INTO test_result (id_user, perfil, puntaje) VALUES(?,?,?)', (id, Preferencia, Calculo))
+            conn.commit()
+        cur.close()
+        return redirect(url_for('Accessing'))
+    else:
+        return render_template('index.html')
 
 # starting the app
 if __name__ == "__main__":
