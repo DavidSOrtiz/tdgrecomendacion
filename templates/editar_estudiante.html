@@ -3,15 +3,28 @@
 {%block body%}
 <div class="col-md-4 offset-md-4">
     <div class="card card-body">
-        <form action="/update/{{estudiante.0}}" method="POST">
+        <form action="/update" method="POST">
+            <img src="\static\Estudiante.jpg" width="95%" style="display: block; margin-left: auto; margin-right: auto;"><br>
             <div class="form-group">
-                <input type="text" name="Names" placeholder="Usuario Estudiante" value="{{ estudiante.1 }}" class="form-control">
+                <input type="text" name="Names" placeholder="Nombre Estudiante" value="{{ estudiante.1 }}" class="form-control" required>
             </div>
             <div class="form-group">
-                <input type="text" name="Document" placeholder="Documento Estudiante" value="{{ estudiante.2 }}" class="form-control">
+                <input type="text" name="Email" placeholder="Correo Estudiante" value="{{ estudiante.2 }}" class="form-control" required>
             </div>
             <div class="form-group">
-                <input type="text" name="Email" placeholder="Correo Estudiante" value="{{ estudiante.3 }}" class="form-control">
+                <input type="text" name="Password" placeholder="Contraseña" value="{{ estudiante.3 }}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <select name="idtema" class="form-control" required>
+                    <option value="">[Seleccione una opción]</option>
+                    {% for tema in temas %}
+                        {% if tema.0 == estudiante.4 %}
+                        <option value="{{tema.0}}" selected>{{tema.1}}</option>
+                        {% else %}
+                        <option value="{{tema.0}}">{{tema.1}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-success btn-block">Guardar</button>
