@@ -1,4 +1,36 @@
 {% extends 'layout.html' %}
 
 {%block body%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{% if data == "Sin recomendaciones" %}
+    <h1>!Felicitaciones¡, has terminado por el día de hoy con todos los ejercicios planteados.</h1>
+{% else %}
+    <div class="col-md-12">
+        <div class="card card-body">
+            <form action="/calificacion" method="POST">
+                <h5>Ejercicio:</h5>
+                <p>{{ data.0 }}</p>
+                <h5>Entrada:</h5>
+                <p>{{ data.1 }}</p>
+                <h5>Salida:</h5>
+                <p>{{ data.2 }}</p>
+                <table border="1px" style="width: 100%;">
+                    <tr>
+                        <td style="width: 50%;">
+                            <h5>Ejemplo Entrada:</h5>
+                            <p>{{ (data.3) }}</p>
+                        </td>
+                        <td style="width: 50%;">
+                            <h5>Ejemplo Salida:</h5>
+                            <p>{{ data.4 }}</p>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <button type="submit" class="btn btn-success btn-block">Siguiente</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

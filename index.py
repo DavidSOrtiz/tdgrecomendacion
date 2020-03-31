@@ -49,17 +49,6 @@ def add_student():
         flash('Estudiante ingresado correctamente.')
         return redirect(url_for('index'))
 
-@app.errorhandler(500)
-def internal_error(exception):
-    app.logger.exception(exception)
-    file_handler = RotatingFileHandler('C:\inetpub\wwwroot\logs.log', 'a', 1 * 1024 * 1024, 10)
-    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('microblog startup')
-    return render_template('500.html'), 500 
-
 @app.route('/Accessing', methods=['POST', "GET"])
 def Accessing():
     if request.method == 'POST' or request.method == 'GET':
@@ -92,22 +81,146 @@ def Accessing():
         cur.close()
         conn.close()
     
-@app.route('/recomendaciones', methods=['GET'])
+@app.route('/recomendaciones', methods=['POST','GET'])
 def recomendaciones():
+    session['id_objeto'] = ""
     if 'idUser' in session and 'NomUser' in session:
-        if request.method == 'GET':
-            if 'idUser' in session:
-                id = session['idUser']
-                conn = pyodbc.connect(cadenaConexion)
-                cur = conn.cursor()
-                cur.execute('SELECT * FROM test_felder WHERE id_user = ?' , (id))
-                data = cur.fetchall()
-                cur.close()
-                conn.close()
-                if len(data) > 0:
-                    return render_template('recomendaciones.html')
+        if 'idUser' in session:
+            id = session['idUser']
+            conn = pyodbc.connect(cadenaConexion)
+            cur = conn.cursor()
+            cur.execute('SELECT * FROM test_result WHERE id_user = ?' , (id))
+            resultados = cur.fetchall()
+            if len(resultados) > 0:
+                cur.execute('SELECT * FROM [dbo].[valoracion] Where id_user = ?' , (id))
+                calificaciones = cur.fetchall()
+                if len(calificaciones) <= 5:
+                    lista = ""
+                    cur.execute('SELECT id_contexto FROM [dbo].[gusto] Where id_user = ?' , (id))
+                    gustos = cur.fetchall()
+                    for gusto in gustos:
+                        lista = lista + str(gusto[0]) + ","
+                    lista = lista[0:len(lista)-1]
+                    for resultado in resultados:
+                        perfil = resultado[2]
+                        if perfil == "Reflexivo":
+                            act_ref = "Reflexivo"
+                        elif perfil == "Activo":
+                            act_ref = "Activo"
+                        elif perfil == "Intuitivo":
+                            sen_int = "Intuitivo"
+                        elif perfil == "Sensorial":
+                            sen_int = "Sensorial"
+                        elif perfil == "Visual":
+                            vis_ver = "Visual"
+                        elif perfil == "Verbal":
+                            vis_ver = "Verbal"
+                        elif perfil == "Global":
+                            sec_glo = "Global"
+                        elif perfil == "Secuencial":
+                            sec_glo = "Secuencial"
+                    sql = """SELECT * FROM [dbo].[objeto] WHERE act_ref = '""" + act_ref + """' and sen_int = '""" + sen_int + """' and vis_ver = '""" + vis_ver + """' and sec_glo = '""" + sec_glo + """' And id_tema = """ + str(id) + """ and id_contexto in(""" + lista + """)
+                                    Union all
+                                    SELECT * FROM [dbo].[objeto] WHERE act_ref = '""" + act_ref + """' and sen_int = '""" + sen_int + """' and vis_ver = '""" + vis_ver + """' and sec_glo = '""" + sec_glo + """' And id_tema = """ + str(id) + """
+                                    Union all
+                                    SELECT * FROM [dbo].[objeto] WHERE act_ref = '""" + act_ref + """' and vis_ver = '""" + vis_ver + """' and sec_glo = '""" + sec_glo + """' And id_tema = """ + str(id) + """
+                                    Union all
+                                    SELECT * FROM [dbo].[objeto] WHERE vis_ver = '""" + vis_ver + """' and sec_glo = '""" + sec_glo + """' And id_tema = """ + str(id) + """
+                                    Union all
+                                    SELECT * FROM [dbo].[objeto] WHERE vis_ver = '""" + vis_ver + """' And id_tema = """ + str(id) + """
+                                    Union all
+                                    SELECT * FROM [dbo].[objeto] WHERE id_tema = """ + str(id)
+                    cur.execute(sql)
+                    recomendaciones = cur.fetchall()
+                    for recomendacion in recomendaciones:
+                        id_objeto = recomendacion[0]
+                        cur.execute('SELECT * FROM [dbo].[valoracion] Where id_user = ? and id_objeto = ?' , (id, id_objeto))
+                        data = cur.fetchall()
+                        if len(data) == 0:
+                            break
+                        else:
+                            id_objeto = ""
+                    if id_objeto != "":
+                        cur.execute('SELECT [descripcion],[entrada],[salida],[ejmEntrada],[ejmSalida] FROM [objeto] WHERE [id_objeto] = ?' , (id_objeto))
+                        data = cur.fetchall()
+                        session['id_objeto'] = id_objeto
+                        return render_template('recomendaciones.html', data = data[0])
+                    else:
+                        return render_template('recomendaciones.html', data = "Sin recomendaciones")
+                    return render_template('recomendaciones.html', data = data[0])
                 else:
-                    return render_template('formulario.html', estudianteid = id)
+                    cur.execute('SELECT [id_user],[id_objeto],[valoracion] FROM [dbo].[recomendacion] Where id_user = ? Order by valoracion Desc' , (id))
+                    recomendaciones = cur.fetchall()
+                    for recomendacion in recomendaciones:
+                        id_objeto = recomendacion[1]
+                        cur.execute('SELECT * FROM [dbo].[valoracion] Where id_user = ? and id_objeto = ?' , (id, id_objeto))
+                        data = cur.fetchall()
+                        if len(data) == 0:
+                            break
+                        else:
+                            id_objeto = ""
+                    if id_objeto != "":
+                        cur.execute('SELECT [descripcion],[entrada],[salida],[ejmEntrada],[ejmSalida] FROM [objeto] WHERE [id_objeto] = ?' , (id_objeto))
+                        data = cur.fetchall()
+                        session['id_objeto'] = id_objeto
+                        return render_template('recomendaciones.html', data = data[0])
+                    else:
+                        return render_template('recomendaciones.html', data = "Sin recomendaciones")
+            else:
+                return render_template('formulario.html', estudianteid = id)
+            cur.close()
+            conn.close()
+    else:
+        return render_template('index.html')
+
+@app.route('/EliminarContexto/<id>', methods=['GET'])
+def EliminarContexto(id):
+    conn = pyodbc.connect(cadenaConexion)
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM gusto
+        WHERE id_gusto = ?
+    """, (id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('Contexto eliminado correctamente.')
+    return redirect(url_for('contextos'))
+
+@app.route('/calificacion', methods=['POST'])
+def calificacion():
+    if 'id_objeto' in session:
+        return render_template('calificacion.html')
+    else:
+        return render_template('index.html')
+
+@app.route('/guardarcalificacion', methods=['POST'])
+def save_calificacion():
+    if 'id_objeto' in session:
+        if request.method == 'POST':
+            id = session['idUser']
+            id_objeto = session['id_objeto']
+            calificacion = request.form['star']
+            conn = pyodbc.connect(cadenaConexion)
+            cur = conn.cursor()
+            cur.execute('INSERT INTO valoracion (id_user, id_objeto, valoracion) VALUES(?,?,?)', (id, id_objeto, calificacion))
+            conn.commit()
+            return redirect(url_for('recomendaciones'))
+    else:
+        return render_template('index.html')
+
+@app.route('/add_contexto', methods=['POST'])
+def add_contexto():
+    if 'idUser' in session and 'NomUser' in session:
+        if request.method == 'POST':
+            id = session['idUser']
+            id_contexto = request.form['idfaltante']
+            conn = pyodbc.connect(cadenaConexion)
+            cur = conn.cursor()
+            cur.execute('INSERT INTO gusto (id_contexto, id_user) VALUES(?,?)', (id_contexto, id))
+            conn.commit()
+            flash('Contexto agregado correctamente.')
+            return redirect(url_for('contextos'))
     else:
         return render_template('index.html')
 
@@ -124,6 +237,26 @@ def editar_estudiante():
         cur.close()
         conn.close()
         return render_template('editar_estudiante.html', estudiante = data[0], temas = temas)
+    else:
+        return render_template('index.html')
+
+@app.route('/contextos')
+def contextos():
+    if 'idUser' in session and 'NomUser' in session:
+        id = session['idUser']
+        conn = pyodbc.connect(cadenaConexion)
+        cur = conn.cursor()
+        cur.execute('SELECT id_gusto, contexto FROM gusto inner join contexto on gusto.id_contexto = contexto.id_contexto WHERE id_user = ?' , (id))
+        gustos = cur.fetchall()
+        if len(gustos) > 0:
+            Mensaje = "Con Datos"
+        else:
+            Mensaje = "Sin Datos"
+        cur.execute('SELECT id_contexto, contexto FROM contexto WHERE id_contexto NOT IN (SELECT id_contexto FROM gusto where id_user = ?) Order By contexto Asc', (id))
+        faltates = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('contextos.html', gustos = gustos, faltates = faltates, Mensaje = Mensaje)
     else:
         return render_template('index.html')
 

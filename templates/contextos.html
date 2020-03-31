@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{%block body%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="col-md-12">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message == 'Contexto agregado correctamente.' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="card card-body">
+        <form action="/add_contexto" method="POST">
+            <div class="form-group">
+                <select name="idfaltante" class="form-control" required>
+                    <option value="">[Seleccione una opción]</option>
+                    {% for faltate in faltates -%} 
+                    <option value="{{faltate.0}}">{{faltate.1}}</option>
+                    {%- endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-dark btn-block">Agregar Contexto</button>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+<div class="col-md-12">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message == 'Contexto eliminado correctamente.' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="card card-body">
+        <form action="/recomendaciones" method="POST">
+            <table border="1" align="center" style="text-align: center;width: 50%;">
+                <tr>
+                    <th>Contexto</th>
+                    <th>Eliminar</th>
+                </tr>
+                {% if Mensaje == "Con Datos" %}
+                    {% for gusto in gustos %}
+                    <tr>
+                        <td>{{gusto.1}}</td>
+                        <td><a href="/EliminarContexto/{{gusto.0}}" class="btn btn-danger btn-block"><i class="far fa-trash-alt"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr><td colspan="2" align="center">No cuenta con contextos relacionados</td></tr>
+                {% endif %}
+            </table>
+            {% if Mensaje == "Con Datos" %}
+                <br>
+                <button type="submit" class="btn btn-success btn-block">Siguiente</button>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}
