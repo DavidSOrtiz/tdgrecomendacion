@@ -42,12 +42,18 @@ def add_student():
         idtema = request.form['idtema']
         conn = pyodbc.connect(cadenaConexion)
         cur = conn.cursor()
-        cur.execute('INSERT INTO usuario (nombre, correo, clave, id_tema) VALUES(?,?,?,?)', (Names, Email, password, idtema))
-        conn.commit()
+        cur.execute('SELECT * FROM usuario WHERE correo = ?', (Email))
+        Usuario = cur.fetchall()
+        if len(Usuario) > 0:
+            flash('Estudiante ya existe.')
+            return redirect(url_for('index'))
+        else:
+            cur.execute('INSERT INTO usuario (nombre, correo, clave, id_tema) VALUES(?,?,?,?)', (Names, Email, password, idtema))
+            conn.commit()
+            flash('Estudiante ingresado correctamente.')
+            return redirect(url_for('index'))
         cur.close()
         conn.close()
-        flash('Estudiante ingresado correctamente.')
-        return redirect(url_for('index'))
 
 @app.route('/Accessing', methods=['POST', "GET"])
 def Accessing():
@@ -214,12 +220,13 @@ def add_contexto():
     if 'idUser' in session and 'NomUser' in session:
         if request.method == 'POST':
             id = session['idUser']
-            id_contexto = request.form['idfaltante']
+            contextos = request.form.getlist('contexto')
             conn = pyodbc.connect(cadenaConexion)
             cur = conn.cursor()
-            cur.execute('INSERT INTO gusto (id_contexto, id_user) VALUES(?,?)', (id_contexto, id))
-            conn.commit()
-            flash('Contexto agregado correctamente.')
+            for id_contexto in contextos:
+                cur.execute('INSERT INTO gusto (id_contexto, id_user) VALUES(?,?)', (int(id_contexto), id))
+                conn.commit()
+            flash('Contextos agregados correctamente.')
             return redirect(url_for('contextos'))
     else:
         return render_template('index.html')
@@ -249,14 +256,18 @@ def contextos():
         cur.execute('SELECT id_gusto, contexto FROM gusto inner join contexto on gusto.id_contexto = contexto.id_contexto WHERE id_user = ?' , (id))
         gustos = cur.fetchall()
         if len(gustos) > 0:
-            Mensaje = "Con Datos"
+            Mensajegustos = "Con Datos"
         else:
-            Mensaje = "Sin Datos"
+            Mensajegustos = "Sin Datos"
         cur.execute('SELECT id_contexto, contexto FROM contexto WHERE id_contexto NOT IN (SELECT id_contexto FROM gusto where id_user = ?) Order By contexto Asc', (id))
         faltates = cur.fetchall()
+        if len(faltates) > 0:
+            Mensajefaltantes = "Con Datos"
+        else:
+            Mensajefaltantes = "Sin Datos"
         cur.close()
         conn.close()
-        return render_template('contextos.html', gustos = gustos, faltates = faltates, Mensaje = Mensaje)
+        return render_template('contextos.html', gustos = gustos, faltates = faltates, Mensajegustos = Mensajegustos, Mensajefaltantes = Mensajefaltantes)
     else:
         return render_template('index.html')
 

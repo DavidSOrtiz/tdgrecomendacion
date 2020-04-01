@@ -96,7 +96,7 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 </div>
-                                <input type="text" name="Usuario" class="form-control input_user" value="" placeholder="Usuario" style="border: 1px solid #013763;" required>
+                                <input type="text" name="Usuario" class="form-control input_user" value="" placeholder="Correo Electrónico" style="border: 1px solid #013763;" required>
                             </div>
                             <div class="input-group mb-2">
                                 <div class="input-group-append">
@@ -119,25 +119,25 @@
                         </div>
                     </div>
                     {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    {% for message in messages %}
-                        {% if message == 'Estudiante ingresado correctamente.' %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        {% else %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message == 'Estudiante ingresado correctamente.' %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
-                    {% endfor %}
-                    {% endif %}
                     {% endwith %}
                 </div>
             </div>

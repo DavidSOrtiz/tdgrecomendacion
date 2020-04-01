@@ -7,7 +7,7 @@
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                {% if message == 'Contexto agregado correctamente.' %}
+                {% if message == 'Contextos agregados correctamente.' %}
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ message }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -21,16 +21,34 @@
     <div class="card card-body">
         <form action="/add_contexto" method="POST">
             <div class="form-group">
-                <select name="idfaltante" class="form-control" required>
-                    <option value="">[Seleccione una opción]</option>
-                    {% for faltate in faltates -%} 
-                    <option value="{{faltate.0}}">{{faltate.1}}</option>
-                    {%- endfor %}
-                </select>
+                <table style="width: 100%;">
+                    {% if Mensajefaltantes == "Con Datos" %}
+                        {% set count = namespace(a=0,b=1) %}
+                        {% for faltate in faltates %}
+                            {% if count.a == 0 %}
+                                <tr>
+                            {% endif %}
+                            <td>
+                                <input type="checkbox" id="{{faltate.0}}" name="contexto" value="{{faltate.0}}">
+                                <label for="contexto">{{faltate.1}}</label>
+                            </td>
+                            {% if count.a == 6 %}
+                                </tr>
+                                {% set count.a = 0 %}
+                            {% endif %}
+                            {% set count.a = count.a + 1 %}
+                            {% set count.b = count.b + 1 %}
+                        {% endfor %}
+                    {% else %}
+                    <tr><td colspan="2" align="center">Todos los contextos fueron seleccionados</td></tr>
+                    {% endif %}
+                </table>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-dark btn-block">Agregar Contexto</button>
-            </div>
+            {% if Mensajefaltantes == "Con Datos" %}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-dark btn-block">Agregar Contexto</button>
+                </div>
+            {% endif %}
         </form>
     </div>
 </div>
@@ -57,7 +75,7 @@
                     <th>Contexto</th>
                     <th>Eliminar</th>
                 </tr>
-                {% if Mensaje == "Con Datos" %}
+                {% if Mensajegustos == "Con Datos" %}
                     {% for gusto in gustos %}
                     <tr>
                         <td>{{gusto.1}}</td>
@@ -68,9 +86,15 @@
                 <tr><td colspan="2" align="center">No cuenta con contextos relacionados</td></tr>
                 {% endif %}
             </table>
-            {% if Mensaje == "Con Datos" %}
+            {% if Mensajegustos == "Con Datos" %}
                 <br>
-                <button type="submit" class="btn btn-success btn-block">Siguiente</button>
+                <div class="form-group">
+                    <div style="width: 49%;float: left;"><a href="/Accessing" class="btn btn-primary btn-block">Regresar</a></div>
+                    <div style="width: 49%;float: right;"><button type="submit" class="btn btn-success btn-block">Siguiente</button></div>
+                </div>
+            {% else %}
+                <br>
+                <a href="/Accessing" class="btn btn-primary btn-block">Regresar</a>
             {% endif %}
         </form>
     </div>
