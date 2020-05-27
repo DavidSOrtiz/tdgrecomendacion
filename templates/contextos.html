@@ -71,11 +71,11 @@
     <div class="card card-body">
         <form action="/recomendaciones" method="POST">
             <table border="1" align="center" style="text-align: center;width: 50%;">
-                <tr>
-                    <th>Contexto</th>
-                    <th>Eliminar</th>
-                </tr>
-                {% if Mensajegustos == "Con Datos" %}
+		{% if Mensajegustos == "Con Datos" %}
+                    <tr>
+                    	<th>Contexto</th>
+                    	<th>Eliminar</th>
+                    </tr>
                     {% for gusto in gustos %}
                     <tr>
                         <td>{{gusto.1}}</td>
